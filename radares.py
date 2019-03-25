@@ -1,3 +1,5 @@
+import webbrowser
+
 def nombreprovincias(doc):
 	lista_prov = doc.xpath("/RAIZ/PROVINCIA/NOMBRE/text()")
 	return lista_prov
@@ -22,6 +24,18 @@ def mostrar_prov_y_radares(doc,carretera):
 		print("Provincia por la que pasa dicha carretera:",nombres)
 	print("Nº de radares en dicha carretera:",int(lista_radares))
 
+def contar_radares_y_mostrar_coordenadas(doc,carretera):
+	lista_radares = doc.xpath("count(//CARRETERA[DENOMINACION='%s']/RADAR)"%(carretera.title()))
+	Latitud_Ini = doc.xpath("//CARRETERA[DENOMINACION='%s']/RADAR/PUNTO_INICIAL/LATITUD/text()"%(carretera.title()))
+	Longitud_Ini = doc.xpath("//CARRETERA[DENOMINACION='%s']/RADAR/PUNTO_INICIAL/LONGITUD/text()"%(carretera.title()))
+	Latitud_Fin = doc.xpath("//CARRETERA[DENOMINACION='%s']/RADAR/PUNTO_FINAL/LATITUD/text()"%(carretera.title()))
+	Longitud_Fin = doc.xpath("//CARRETERA[DENOMINACION='%s']/RADAR/PUNTO_FINAL/LONGITUD/text()"%(carretera.title()))
+	for i in range(1,int(lista_radares)):
+		print("Radar nº",i,":")
+		print("Latitud Inicial:",Latitud_Ini[i],"// Longitud Inicial:",Longitud_Ini[i])
+		print("Latitud Final:",Latitud_Fin[i],"// Longitud Final:",Longitud_Fin[i])
+	url = 'https://www.openstreetmap.org/directions?engine=graphhopper_car&route='+Latitud_Ini[i]+'%2C'+Longitud_Ini[i]+'%3B'+Latitud_Fin[i]+'%2C'+Longitud_Fin[i]+'#map=12/39.0407/-1.8079&layers=N'
+	print("URL de las coordenadas: ",url)
 
 from lxml import etree
 
@@ -35,7 +49,7 @@ while True:
 5.- Pedir por teclado una carretera, cuenta los radares que tiene y muestra las coordenadas de los radares.
 0.- Salir''')
 
-	opcion = input("Opción:")
+	opcion = input("Opción: ")
 
 	if opcion=="1":
 		for nombres in nombreprovincias(doc):
@@ -51,6 +65,10 @@ while True:
 	if opcion=="4":
 		carretera = input("Dime el nombre de una carretera: ")
 		print(mostrar_prov_y_radares(doc,carretera))
+
+	if opcion=="5":
+		carretera = input("Dime el nombre de una carretera: ")
+		print(contar_radares_y_mostrar_coordenadas(doc,carretera))
 
 	if opcion=="0":
 		break
