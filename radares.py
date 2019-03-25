@@ -2,6 +2,10 @@ def nombreprovincias(doc):
 	lista_prov = doc.xpath("/RAIZ/PROVINCIA/NOMBRE/text()")
 	return lista_prov
 
+def cantidad_radares(doc):
+	lista_radares = doc.xpath("count(//CARRETERA/RADAR)")
+	return lista_radares
+
 from lxml import etree
 
 doc = etree.parse('radares.xml')
@@ -19,6 +23,9 @@ while True:
 	if opcion=="1":
 		for nombres in nombreprovincias(doc):
 			print("Nombre de la provincia:",nombres)
+
+	if opcion=="2":
+		print("Cantidad de radares:",int(cantidad_radares(doc)))
 
 	if opcion=="0":
 		break
