@@ -15,6 +15,13 @@ def carreteras_radares(doc,provincia):
 	lista_radares = doc.xpath("count(//PROVINCIA[NOMBRE='%s']//CARRETERA/RADAR)"%(provincia.title()))
 	print("Nº de radares en la provincia de", provincia,":",int(lista_radares))
 
+def mostrar_prov_y_radares(doc,carretera):
+	lista_prov = doc.xpath("//CARRETERA[DENOMINACION='%s']/../NOMBRE/text()"%(carretera.title()))
+	lista_radares = doc.xpath("count(//CARRETERA[DENOMINACION='%s']/RADAR)"%(carretera.title()))
+	for nombres in lista_prov:
+		print("Provincia por la que pasa dicha carretera:",nombres)
+	print("Nº de radares en dicha carretera:",int(lista_radares))
+
 
 from lxml import etree
 
@@ -40,6 +47,10 @@ while True:
 	if opcion=="3":
 		provincia = input("Dime el nombre de una provincia: ")
 		print(carreteras_radares(doc,provincia))
+
+	if opcion=="4":
+		carretera = input("Dime el nombre de una carretera: ")
+		print(mostrar_prov_y_radares(doc,carretera))
 
 	if opcion=="0":
 		break
